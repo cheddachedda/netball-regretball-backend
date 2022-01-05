@@ -68,3 +68,33 @@ exports.signUp = (req, res) => {
       }
     });
 };
+
+// POST '/login'
+// Logs-in a user with Firebase Authentication and returns a Firebase-verified session token
+exports.login = (req, res) => {
+  const user = {
+    email: req.body.email,
+    password: req.body.password
+  };
+
+  const { valid, errors } = validateLoginData(user);
+
+  // Returns error messages for rendering in UI
+  if (!valid) return res.status(400).json(errors);
+
+  signInWithEmailAndPassword(auth, user.email, user.password)
+    .then((data) => {
+      return data.user.getIdToken()
+    })
+    .then((token) => {
+      return res.json({ token });
+    })
+    .catch((err) => {
+      console.error(err);
+      if (err.code === 'auth/wrong-password') {
+        return res.status(403).json({ general: 'Wrong credentials. Please try again.' });
+      } else {
+        return res.status(500).json({ error: err.code });
+      }
+    });
+};
