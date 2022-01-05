@@ -37,3 +37,15 @@ exports.validateLoginData = (data) => {
     valid: Object.keys(errors).length === 0
   };
 };
+
+// Receives the user's form data and filters non-empty fields
+exports.reduceUserDetails = (data) => {
+  const userDetails = {};
+
+  // TODO: add req object keys and cleanup methods as necessary
+  // currently assumes that there's only one form field ("info")
+  if (!isEmpty(data.info.trim())) userDetails.info = data.info;
+  // if (!isEmpty(data.anotherKey.trim())) userDetails.anotherKey = data.anotherKey;
+
+  return userDetails;
+};
