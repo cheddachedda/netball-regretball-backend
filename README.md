@@ -14,3 +14,13 @@ POST /signup
   "username": "some_username"
 }
 ```
+
+### Login
+```
+POST /login
+
+{
+  "email": "some_email@email.com",
+  "password": "password"
+}
+```
