@@ -3,7 +3,7 @@ const { getAuth, createUserWithEmailAndPassword, signInWithEmailAndPassword } = 
 
 const { db } = require('../util/admin');
 const firebaseConfig = require('../util/firebaseConfig');
-const { validateSignUpData, validateLoginData } = require('../util/helpers');
+const { validateSignUpData, validateLoginData, reduceUserDetails } = require('../util/helpers');
 
 initializeApp(firebaseConfig);
 const auth = getAuth();
@@ -96,5 +96,21 @@ exports.login = (req, res) => {
       } else {
         return res.status(500).json({ error: err.code });
       }
+    });
+};
+
+// POST '/user'
+// Receives a user's form data and updates only non-empty fields in the Firestore database
+exports.updateUserDetails = (req, res) => {
+  let userDetails = reduceUserDetails(req.body);
+
+  db.doc(`/users/${ req.user.handle }`)
+    .update(userDetails)
+    .then(() => {
+      return res.json({ message: 'Details updateed successfully' });
+    })
+    .catch((err) => {
+      console.error(err);
+      return res.status(500).json({ error: err.code });
     });
 };
