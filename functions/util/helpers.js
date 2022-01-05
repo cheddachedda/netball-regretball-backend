@@ -42,10 +42,17 @@ exports.validateLoginData = (data) => {
 exports.reduceUserDetails = (data) => {
   const userDetails = {};
 
-  // TODO: add req object keys and cleanup methods as necessary
-  // currently assumes that there's only one form field ("info")
-  if (!isEmpty(data.info.trim())) userDetails.info = data.info;
-  // if (!isEmpty(data.anotherKey.trim())) userDetails.anotherKey = data.anotherKey;
+  if (!isEmpty(data.bio.trim())) userDetails.bio = data.bio;
+
+  if (!isEmpty(data.website.trim())) {
+    if (data.website.trim().substring(0, 4) !== 'http') {
+      userDetails.website = `http://${ data.website.trim() }`;
+    } else {
+      userDetails.website = data.website;
+    }
+  }
+
+  if (!isEmpty(data.location.trim())) userDetails.location = data.location;
 
   return userDetails;
 };
