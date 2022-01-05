@@ -5,5 +5,6 @@ const { signUp } = require('./handlers/users');
 
 // Users routes
 app.post('/signup', signUp);
+app.post('/login', login);
 
 exports.api = functions.region('australia-southeast1').https.onRequest(app);
